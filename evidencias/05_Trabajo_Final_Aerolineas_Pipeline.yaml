@@ -1,0 +1,32 @@
+resources:
+  jobs:
+    Trabajo_Final_Aerolineas_Pipeline:
+      name: Trabajo_Final_Aerolineas_Pipeline
+      email_notifications:
+        on_failure:
+          - sotograjalesdaniela@gmail.com
+          - 05valarist@gmail.com
+      tasks:
+        - task_key: Bronze_Ingestion
+          spark_python_task:
+            python_file: /Workspace/Users/sotograjalesdaniela@gmail.com/trabajoFinal/01_bronze_ingestion.py
+          environment_key: Default
+        - task_key: Silver_Transform
+          depends_on:
+            - task_key: Bronze_Ingestion
+          spark_python_task:
+            python_file: /Workspace/Users/sotograjalesdaniela@gmail.com/trabajoFinal/02_silver_transform.py
+          environment_key: Default
+        - task_key: Gold_Analytics
+          depends_on:
+            - task_key: Silver_Transform
+          spark_python_task:
+            python_file: /Workspace/Users/sotograjalesdaniela@gmail.com/trabajoFinal/03_gold_analytcs.py
+          environment_key: Default
+      queue:
+        enabled: true
+      environments:
+        - environment_key: Default
+          spec:
+            environment_version: "6"
+      performance_target: PERFORMANCE_OPTIMIZED
